@@ -1,8 +1,25 @@
 <template>
   <div>
+    <!-- 头部组件 -->
+    <Header />
+    <!-- 相当于router-view, 是一个页面组件的占位符 -->
     <nuxt />
+    <!-- 页脚组件 -->
+    <Footer />
   </div>
 </template>
+
+<script>
+import header from '@/components/header'
+import footer from '@/components/footer'
+export default {
+  components:{
+    Header: header,
+    Footer: footer
+  }
+}
+</script>
+
 
 <style>
 html {
@@ -17,39 +34,22 @@ html {
   box-sizing: border-box;
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
+/* 把所有的标签自带的margin与padding设置为0  */
+*{
   margin: 0;
+  padding:0;
 }
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
+/* 列表去除列表样式 */
+ul, li , ol{
+  list-style: none;
+}
+/* a标签颜色改为继承，去掉修饰线 */
+a{
+  color: inherit;
   text-decoration: none;
-  padding: 10px 30px;
 }
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+/* 斜体-正常样式 */
+em,i {
+  font-style: normal;
 }
 </style>
