@@ -8,13 +8,13 @@
       class="demo-ruleForm"
     >
       <el-form-item prop="nickname">
-        <el-input v-model="loginForm.name"></el-input>
+        <el-input v-model="loginForm.username"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input v-model="loginForm.password"></el-input>
       </el-form-item>
-        <el-link type="primary" class='forgetPassword'>忘记密码</el-link>
-      <el-button type="primary" style="width:350px;">登录</el-button>
+      <nuxt-link to='/' type="primary" class="forgetPassword">忘记密码</nuxt-link>
+      <el-button type="primary" style="width:350px;" @click.native='handleLogin'>登录</el-button>
     </el-form>
   </div>
 </template>
@@ -24,33 +24,40 @@ export default {
   data() {
     return {
       loginForm: {
-        nickname: "",
+        username: "",
         password: ""
       },
       rules: {
-        nickname: [
+        username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 8 个字符", trigger: "blur" }
+          { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
         ]
       }
     };
+  },
+  methods:{
+      handleLogin(){
+          
+      }
   }
 };
 </script>
 
 <style scoped lang="less">
-.login{
-    margin:20px 25px;
-    /deep/.forgetPassword{
-        height:20px;
-        font-size:14px;
-        line-height: 20px;
-        color:blue;
-        float:right;
-    }
+.login {
+  margin: 20px 25px;
+  /deep/.forgetPassword {
+    height: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    color: blue;
+    float: right;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
 }
 </style>
