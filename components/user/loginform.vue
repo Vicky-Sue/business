@@ -13,8 +13,8 @@
       <el-form-item prop="password">
         <el-input v-model="loginForm.password"></el-input>
       </el-form-item>
-      <nuxt-link to='/' type="primary" class="forgetPassword">忘记密码</nuxt-link>
-      <el-button type="primary" style="width:350px;" @click.native='handleLogin'>登录</el-button>
+      <nuxt-link to="/" type="primary" class="forgetPassword">忘记密码</nuxt-link>
+      <el-button type="primary" style="width:350px;" @click.native="handleLoginSubmit">登录</el-button>
     </el-form>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 2, max: 15, message: "长度在 2 到 15 个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
@@ -39,10 +39,25 @@ export default {
       }
     };
   },
-  methods:{
-      handleLogin(){
-          
-      }
+  methods: {
+    //   登录
+    handleLoginSubmit() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.$axios({
+            url: "/accounts/login",
+            method: "POST",
+            data:this.loginForm
+          }).then(res => {
+            console.log(res, "登录的res");
+            if(res.status===200){
+                this.$message.success('登录成功！')
+                this.$router.back();
+            }
+          });
+        }
+      });
+    }
   }
 };
 </script>
