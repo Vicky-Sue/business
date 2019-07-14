@@ -20,21 +20,22 @@
         <div v-if="false">
           <nuxt-link to="/user/login"></nuxt-link>
         </div>
-        <div class='login'>
+        <div class="login">
           <el-dropdown>
             <span class="el-dropdown-link">
-              <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt="">
+              <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt />
               perfect程序优化
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>个人中心</el-dropdown-item>
-              <el-dropdown-item>退出</el-dropdown-item>
+              <el-dropdown-item @click.native="handleLogout">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
         <div class="info">
-          <i class="el-icon-bell"></i>消息</div>
+          <i class="el-icon-bell"></i>消息
+        </div>
       </div>
     </el-row>
   </div>
@@ -42,11 +43,17 @@
 
 <script>
 export default {
-  data(){
-    return{
-
-    }
+  data() {
+    return {};
   },
+
+  methods: {
+    // 退出登录
+    handleLogout() {
+      this.$router.push("/");
+      console.log('退出登录')
+    }
+  }
 };
 </script>
 
@@ -62,43 +69,43 @@ export default {
   line-height: 60px;
 }
 .logo {
-    img{
-     height:60px   
-    }
+  img {
+    height: 60px;
+  }
 }
 .navs {
   flex: 1;
-  a{
-      display:block;
-      padding: 0 20px;
-      height: 60px;
-      box-sizing:border-box;
-      &:hover{
-          color:#3f9ffe;
-          border-bottom: 5px solid #3f9ffe;
-      }
+  a {
+    display: block;
+    padding: 0 20px;
+    height: 60px;
+    box-sizing: border-box;
+    &:hover {
+      color: #3f9ffe;
+      border-bottom: 5px solid #3f9ffe;
+    }
   }
 
-  .nuxt-link-exact-active{
-      background-color: #3f9ffe;
-      color:#fff;
-      &:hover{
-          color:#fff;
-      }
+  .nuxt-link-exact-active {
+    background-color: #3f9ffe;
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
   }
 }
 .user {
-    .info{
-        float:right;
-        margin-right:10px;
+  .info {
+    float: right;
+    margin-right: 10px;
+  }
+  .login {
+    float: right;
+    img {
+      width: 36px;
+      height: 36px;
+      vertical-align: middle;
     }
-    .login{
-        float:right;
-        img{
-            width:36px;
-            height:36px;
-            vertical-align: middle;
-        }
-    }
+  }
 }
 </style>
