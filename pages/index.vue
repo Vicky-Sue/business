@@ -109,9 +109,8 @@ export default {
             color:palevioletred;
           }
           &:after{
-            background: #eee;
+            background-color: #eee;
           }
-          
         }
         span {
           display: block;

@@ -44,17 +44,31 @@ export default {
     handleLoginSubmit() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.$axios({
-            url: "/accounts/login",
-            method: "POST",
-            data:this.loginForm
-          }).then(res => {
-            console.log(res, "登录的res");
-            if(res.status===200){
-                this.$message.success('登录成功！')
-                this.$router.back();
-            }
-          });
+          // this.$axios({
+          //   url: "/accounts/login",
+          //   method: "POST",
+          //   data:this.loginForm
+          // }).then(res => {
+          //   console.log(res, "登录的res");
+          //   if(res.status===200){
+          //       // 把数据保存到vuex,user是模块名字（命名空间）
+          //       this.$store.commit('user/setUserInfo',res.data)
+          //       console.log(this.$store,'$store里面的值');
+          //       this.$message.success('登录成功！')
+          //       this.$router.back();
+          //   }
+          // });
+          this.$store.dispatch('user/login',this.loginForm).then(res=>{
+            // 成功提示
+            this.$message({
+              message:'登录成功，正在跳转',
+              type:'success'
+            });
+            // 跳转到首页
+            setTimeout(()=>{
+              this.$router.replace('/')
+            },1500)
+          })
         }
       });
     }

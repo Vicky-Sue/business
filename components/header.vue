@@ -17,24 +17,26 @@
 
       <!-- 登录部分 -->
       <div class="user">
-        <div v-if="false">
-          <nuxt-link to="/user/login"></nuxt-link>
+        <div v-if="!$store.state.user.userInfo.token">
+          <nuxt-link to="/user/login">登录/注册</nuxt-link>
         </div>
-        <div class="login">
+        <div v-else class="login">
+          <div class="info">
+            <i class="el-icon-bell"></i>消息
+          </div>
           <el-dropdown>
             <span class="el-dropdown-link">
-              <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt />
-              perfect程序优化
-              <i class="el-icon-arrow-down el-icon--right"></i>
+              <img :src="$axios.defaults.baseURL+$store.state.user.userInfo.user.defaultAvatar" alt />
+              {{$store.state.user.userInfo.user.nickname}}
+              <i
+                class="el-icon-arrow-down el-icon--right"
+              ></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>个人中心</el-dropdown-item>
               <el-dropdown-item @click.native="handleLogout">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </div>
-        <div class="info">
-          <i class="el-icon-bell"></i>消息
         </div>
       </div>
     </el-row>
@@ -51,7 +53,7 @@ export default {
     // 退出登录
     handleLogout() {
       this.$router.push("/");
-      console.log('退出登录')
+      console.log("退出登录");
     }
   }
 };
@@ -95,12 +97,12 @@ export default {
   }
 }
 .user {
-  .info {
-    float: right;
-    margin-right: 10px;
-  }
   .login {
     float: right;
+    .info {
+      float: right;
+      margin-right: 10px;
+    }
     img {
       width: 36px;
       height: 36px;
