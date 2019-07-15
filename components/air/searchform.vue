@@ -87,9 +87,11 @@ export default {
     // tab切换时触发
     handleSearchTab(item, index) {
       if (index === 1) {
-        this.$alert("暂时没有往返", "提示", {
-          type: "warning"
-        });
+        this.$confirm('目前暂不支持往返，请使用单程选票！','提示',{
+            confirmButtonText:'确定',
+            showCancelButton:false,
+            type:'warning'
+        })
       }
     },
     //获取出发城市的数据
@@ -181,6 +183,7 @@ export default {
     },
     // 提交搜索表单数据
     handleSearchSubmit() {
+        console.log(this.ticketForm,'提交搜索表单的数据ticketForm')
       // 验证方式
       const rules = {
         departCity: {
