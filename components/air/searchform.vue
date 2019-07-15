@@ -171,11 +171,11 @@ export default {
     },
     // 出发和目标城市切换时触发
     handleReverse(){
-        const {departCity,departCode,destCity,destCode}=this.form;
+        const {departCity,departCode,destCity,destCode}=this.ticketForm;
 
         this.ticketForm.departCity=destCity;
         this.ticketForm.departCode=destCode;
-        
+
         this.ticketForm.destCity=departCity;
         this.ticketForm.destCode=departCode;
     },
