@@ -210,8 +210,13 @@ export default {
           this.$message.warning(rules[v].message);
         }
       });
-      console.log()
     //   跳转
+    if(valid){
+        this.$router.push({
+            path:'/airs/flights',
+            query:this.ticketForm
+        })
+    }
     
     }
   },
