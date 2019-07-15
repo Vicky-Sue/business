@@ -54,7 +54,7 @@ export default {
         username: "",
         nickname: "",
         captcha: "",
-        password:'',
+        password: "",
         checkPassword: ""
       },
       // 表单规则
@@ -62,70 +62,60 @@ export default {
         username: [
           { required: true, message: "请输入手机号", trigger: "blur" }
         ],
-        captcha: [
-          { required: true, message: "请输入验证码", trigger: "blur" }
-        ],
-        nickname: [
-          { required: true, message: "请输入昵称", trigger: "blur" }
-        ],
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur" }
-        ],
-        checkPassword: [{ validator:validatePass, trigger: "blur" }]
+        captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
+        nickname: [{ required: true, message: "请输入昵称", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        checkPassword: [{ validator: validatePass, trigger: "blur" }]
       }
     };
   },
   methods: {
     //   发送验证码
     handleCaptchaSend() {
-        if(!this.regisForm.username){
-            this.$confirm('手机号不能为空','提示',{
-                confirmButtonText:'确定',
-                showCancelButton:false,
-                type:'warning'
-            })
-            return;
-        }
-        if(this.regisForm.username.length!==11){
-            this.$confirm('手机号码格式不正确','提示',{
-                confirmButtonText:'确定',
-                showCancelButton:false,
-                type:'warning'
-            })
-            return;
-        }
-        // 验证码接口
-        this.$axios({
-            url:'/captchas',
-            method:'POST',
-            data:{tel:this.regisForm.username}
-        }).then(res=>{
-            console.log(res,'验证发送的res')
-            const {code}=res.data;
-            this.$confirm(`手机验证码为${code}`,'提示',{
-                confirmButtonText:'确定',
-                showCancelButton:false,
-                type:'warning'
-            })
-        })
+      if (!this.regisForm.username) {
+        this.$confirm("手机号不能为空", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+        return;
+      }
+      if (this.regisForm.username.length !== 11) {
+        this.$confirm("手机号码格式不正确", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+        return;
+      }
+      // 验证码接口
+      this.$axios({
+        url: "/captchas",
+        method: "POST",
+        data: { tel: this.regisForm.username }
+      }).then(res => {
+        console.log(res, "验证发送的res");
+        const { code } = res.data;
+        this.$confirm(`手机验证码为${code}`, "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+      });
     },
     //   提交注册
     handleRegisSubmit() {
-        this.$refs.regisForm.validate(valid=>{
-            if(valid){
-                const {checkPassword,...props}=this.regisForm;
-        this.$axios({
-            url:'/accounts/register',
-            method:'POST',
-            data:props
-        }).then(res=>{
-            console.log(res,'提交注册的res')
+      this.$refs.regisForm.validate(valid => {
+        if (valid) {
+          const { checkPassword, ...props } = this.regisForm;
+          this.$store.dispatch('user/register',props).then(res => {
+            console.log(res, "提交注册的res");
             // 把数据保存到vuex,user是模块名字（命名空间）
-            this.$store.commit('user/setUserInfo',res.data);
+            this.$message.success('恭喜！注册成功！')
             this.$router.back();
-        })
-            }
-        })
+          });
+        }
+      });
     }
   }
 };

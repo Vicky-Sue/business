@@ -16,7 +16,7 @@
         <!-- 登录功能组件 -->
         <Loginform v-if='current===0'/> 
         <!-- 注册功能组件 -->
-        <Register v-if='current===1'/>   
+        <Registerform v-if='current===1'/>   
       </div>
     </el-row>
   </div>
@@ -24,17 +24,17 @@
 
 <script>
 import Loginform from '@/components/user/loginform'
-import Register from '@/components/user/register'
+import Registerform from '@/components/user/registerform'
 export default {
     // 注册组件
     components:{
     Loginform,
-    Register,
+    Registerform,
     },
     data(){
         return{
             // 当前索引
-            current:1,
+            current:0,
         }
     },
     methods:{
