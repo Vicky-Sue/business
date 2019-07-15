@@ -52,8 +52,14 @@ export default {
   methods: {
     // 退出登录
     handleLogout() {
-      this.$router.push("/");
-      console.log("退出登录");
+      // this.$router.push("/");
+      // console.log("退出登录");
+      const {commit}=this.$store;
+      commit('user/clearUserInfo')
+      this.$message({
+        message:'退出成功',
+        type:'success'
+      })
     }
   }
 };

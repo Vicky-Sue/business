@@ -29,7 +29,7 @@ export default {
     // 注册组件
     components:{
     Loginform,
-Register,
+    Register,
     },
     data(){
         return{
@@ -50,7 +50,7 @@ Register,
 .container {
   min-width: 1000px;
   height: 700px;
-  background: url(http://157.122.54.189:9095/assets/images/th03.jfif) center 0;
+  background: url(http://127.0.0.1:1337/assets/images/th03.jfif) center 0;
   .main {
     width: 1000px;
     height: 100%;

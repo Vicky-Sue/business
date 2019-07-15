@@ -7,11 +7,11 @@
       style="width:350px;"
       class="demo-ruleForm"
     >
-      <el-form-item prop="nickname">
-        <el-input v-model="loginForm.username"></el-input>
+      <el-form-item prop="username">
+        <el-input v-model="loginForm.username" placeholder="请输入用户名/邮箱"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model="loginForm.password"></el-input>
+        <el-input v-model="loginForm.password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <nuxt-link to="/" type="primary" class="forgetPassword">忘记密码</nuxt-link>
       <el-button type="primary" style="width:350px;" @click.native="handleLoginSubmit">登录</el-button>
@@ -37,7 +37,7 @@ export default {
           { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
         ]
       }
-    };
+    }
   },
   methods: {
     //   登录
@@ -60,6 +60,7 @@ export default {
           // });
           this.$store.dispatch('user/login',this.loginForm).then(res=>{
             // 成功提示
+            console.log(res,'登录成功的res')
             this.$message({
               message:'登录成功，正在跳转',
               type:'success'
