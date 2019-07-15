@@ -37,7 +37,7 @@ export default {
           { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
         ]
       }
-    }
+    };
   },
   methods: {
     //   登录
@@ -58,18 +58,18 @@ export default {
           //       this.$router.back();
           //   }
           // });
-          this.$store.dispatch('user/login',this.loginForm).then(res=>{
-            // 成功提示
+          this.$store.dispatch("user/login", this.loginForm).then(res => {
             console.log(res,'登录成功的res')
+            // 成功提示
             this.$message({
-              message:'登录成功，正在跳转',
-              type:'success'
+              message: "登录成功，正在跳转",
+              type: "success"
             });
             // 跳转到首页
-            setTimeout(()=>{
-              this.$router.replace('/')
-            },1500)
-          })
+            setTimeout(() => {
+              this.$router.replace("/");
+            }, 1500);
+          });
         }
       });
     }
