@@ -7,11 +7,13 @@ export default ({ $axios }) => {
 
     // 拦截axios的错误请求
     $axios.onError(err => {
+        console.log(err,'拦截器的res')
+        console.log(err.response,'拦截器的response')
         const { message, statusCode } = err.response.data;
 
         if (statusCode === 400) {
             // 错误提示
-            Message.error(message);
+            Message.error('用户名或者密码错误，请重试');
         }
     })
 

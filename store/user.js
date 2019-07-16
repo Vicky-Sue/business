@@ -41,6 +41,7 @@ export const actions = {
     }).then(res => {
       // 把数据保存到vuex,user是模块名字（命名空间）
       commit('setUserInfo', res.data)
+      return res.data;
     })
   },
   // 注册的接口
@@ -53,6 +54,7 @@ export const actions = {
     }).then(res => {
       // 把数据保存到vuex,user是模块名字（命名空间）
       commit('setUserInfo', res.data)
+      return res.data;
     })
   }
 }
