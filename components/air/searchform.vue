@@ -100,10 +100,11 @@ export default {
     // cb： 回调函数，这个回调函数是必须要调用的
     // cb函数必须要接收一个数组，数组中每一项必须是对象, 对象中必须要有value属性
     // 封装搜索城市关键词的函数
-    queryStringSearch(queryString,cb,setData) {
+    queryStringSearch(queryString) {
       //没有输入值的时候不出现下拉框
+      return new Promise((resolve, reject) => {
         if (!queryString) {
-          cb([]);
+          resolve([]);
           return;
         }
         //   请求推荐城市列表
@@ -119,27 +120,35 @@ export default {
             v.value = v.name.replace("市", "");
             return v;
           });
-          setData(newData)
           //设置默认选中第一个
           // this.ticketForm.departCity = newData[0].value;
           // this.ticketForm.departCode = newData[0].sort;
           // 调用 callback 返回建议列表的数据
-          cb(newData);
+          resolve(newData);
         });
+      });
     },
     //获取出发城市的数据
-    depQuerySearch(value,cb) {
-      this.queryStringSearch(value,cb,(arr)=>{
-        this.ticketForm.departCity = arr[0].value;
-        this.ticketForm.departCode = arr[0].sort;
-      })
+    depQuerySearch(value, cb) {
+      this.queryStringSearch(value).then(res => {
+        console.log(res, "获取出发城市的promise封装的res");
+        if (res.length > 0) {
+          this.ticketForm.departCity = res[0].value;
+          this.ticketForm.departCode = res[0].sort;
+        }
+        cb(res);
+      });
     },
     //获取到达城市的数据
     desQuerySearch(value, cb) {
-      this.queryStringSearch(value,cb,(arr)=>{
-        this.ticketForm.destCity = arr[0].value;
-        this.ticketForm.destCode = arr[0].sort;
-      })
+      this.queryStringSearch(value).then(res => {
+        if(res.length>0){
+          this.ticketForm.destCity = res[0].value;
+        this.ticketForm.destCode = res[0].sort;
+        }
+        cb(res);
+      });
+      
     },
     // 下拉选中出发城市时触发
     depHandleSelect(item) {
