@@ -15,11 +15,7 @@
       <div class="search-bar">
         <!-- tab栏 -->
         <el-row type="flex" class="search-tab">
-          <span 
-          v-for="(item,index) in cateData" 
-          :key="index"
-          :class="{active:current===index}"
-          >
+          <span v-for="(item,index) in cateData" :key="index" :class="{active:current===index}">
             <i @click="handleClick(index)">{{item.title}}</i>
           </span>
         </el-row>
@@ -43,7 +39,7 @@ export default {
       current: 0,
       // 三大页面数据
       cateData: [
-        { title: "攻略", placeholder: "搜素城市" },
+        { title: "攻略", placeholder: "搜索城市" },
         { title: "酒店", placeholder: "请输入城市搜索酒店" },
         { title: "机票", placeholder: "" }
       ]
@@ -53,8 +49,8 @@ export default {
     // 切换tab栏时触发
     handleClick(index) {
       this.current = index;
-      if(index===2){
-        this.$router.push('/air')
+      if (index === 2) {
+        this.$router.push("/air");
       }
     }
   },
@@ -104,11 +100,11 @@ export default {
       width: 556px;
       margin: 0 auto;
       .search-tab {
-        .active{
-          i{
-            color:palevioletred;
+        .active {
+          i {
+            color: black;
           }
-          &:after{
+          &:after {
             background-color: #eee;
           }
         }
@@ -120,29 +116,31 @@ export default {
           margin-right: 8px;
           cursor: pointer;
           i {
-            z-index: 5;
+            // z-index要配合定位才有效
+            position: absolute;
+            z-index: 999;
             display: block;
             width: 100%;
             height: 100%;
             line-height: 30px;
             text-align: center;
             color: #fff;
-            &:after {
-              position: absolute;
-              left: 0;
-              top: 0;
-              display: block;
-              content: "";
-              width: 100%;
-              height: 100%;
-              border: 1px rgba(255, 255, 255, 0.2) solid;
-              border-bottom: none;
-              transform: scale(1.1, 1.3) perspective(0.7em) rotateX(2.2deg);
-              transform-origin: bottom left;
-              background: rgba(0, 0, 0, 0.5);
-              border-radius: 1px 2px 0 0;
-              box-sizing: border-box;
-            }
+          }
+          &:after {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: block;
+            content: "";
+            width: 100%;
+            height: 100%;
+            border: 1px rgba(255, 255, 255, 0.2) solid;
+            border-bottom: none;
+            transform: scale(1.1, 1.3) perspective(0.7em) rotateX(2.2deg);
+            transform-origin: bottom left;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 1px 2px 0 0;
+            box-sizing: border-box;
           }
         }
       }
@@ -162,9 +160,9 @@ export default {
         font-size: 16px;
       }
       .el-icon-search {
-        cursor:pointer;
+        cursor: pointer;
         font-size: 22px;
-        padding:0 10px;
+        padding: 0 10px;
         font-weight: bold;
       }
     }
