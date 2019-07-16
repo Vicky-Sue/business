@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import moment from "moment";
+import moment, { fn } from "moment";
 
 export default {
   data() {
@@ -87,11 +87,11 @@ export default {
     // tab切换时触发
     handleSearchTab(item, index) {
       if (index === 1) {
-        this.$confirm('目前暂不支持往返，请使用单程选票！','提示',{
-            confirmButtonText:'确定',
-            showCancelButton:false,
-            type:'warning'
-        })
+        this.$confirm("目前暂不支持往返，请使用单程选票！", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
       }
     },
     //获取出发城市的数据
@@ -99,59 +99,47 @@ export default {
     // value: 输入框的值
     // cb： 回调函数，这个回调函数是必须要调用的
     // cb函数必须要接收一个数组，数组中每一项必须是对象, 对象中必须要有value属性
-    depQuerySearch(queryString, cb) {
+    // 封装搜索城市关键词的函数
+    queryStringSearch(queryString,cb,setData) {
       //没有输入值的时候不出现下拉框
-      if (!queryString) {
-        cb([]);
-        return;
-      }
-      //   请求推荐城市列表
-      this.$axios({
-        url: "/airs/city",
-        params: { name: queryString }
-      }).then(res => {
-        console.log(res, "获取城市数据的res");
-        // 推荐列表的数组
-        const { data } = res.data;
-        // 给数组中的对象添加value
-        const newData = data.map(v => {
-          v.value = v.name.replace("市", "");
-          return v;
+        if (!queryString) {
+          cb([]);
+          return;
+        }
+        //   请求推荐城市列表
+        this.$axios({
+          url: "/airs/city",
+          params: { name: queryString }
+        }).then(res => {
+          console.log(res, "获取城市数据的res");
+          // 推荐列表的数组
+          const { data } = res.data;
+          // 给数组中的对象添加value
+          const newData = data.map(v => {
+            v.value = v.name.replace("市", "");
+            return v;
+          });
+          setData(newData)
+          //设置默认选中第一个
+          // this.ticketForm.departCity = newData[0].value;
+          // this.ticketForm.departCode = newData[0].sort;
+          // 调用 callback 返回建议列表的数据
+          cb(newData);
         });
-
-        //设置默认选中第一个
-        this.ticketForm.departCity = newData[0].value;
-        this.ticketForm.departCode = newData[0].sort;
-        // 调用 callback 返回建议列表的数据
-        cb(newData);
-      });
+    },
+    //获取出发城市的数据
+    depQuerySearch(value,cb) {
+      this.queryStringSearch(value,cb,(arr)=>{
+        this.ticketForm.departCity = arr[0].value;
+        this.ticketForm.departCode = arr[0].sort;
+      })
     },
     //获取到达城市的数据
-    desQuerySearch(queryString, cb) {
-      if (!queryString) {
-        cb([]);
-        return;
-      }
-      //   请求推荐城市列表
-      this.$axios({
-        url: "/airs/city",
-        params: { name: queryString }
-      }).then(res => {
-        console.log(res, "获取城市数据的res");
-        // 推荐列表的数组
-        const { data } = res.data;
-        // 给数组中的对象添加value
-        const newData = data.map(v => {
-          v.value = v.name.replace("市", "");
-          return v;
-        });
-
-        //设置默认选中第一个
-        this.ticketForm.destCity = newData[0].value;
-        this.ticketForm.destCode = newData[0].sort;
-        // 调用 callback 返回建议列表的数据
-        cb(newData);
-      });
+    desQuerySearch(value, cb) {
+      this.queryStringSearch(value,cb,(arr)=>{
+        this.ticketForm.destCity = arr[0].value;
+        this.ticketForm.destCode = arr[0].sort;
+      })
     },
     // 下拉选中出发城市时触发
     depHandleSelect(item) {
@@ -168,22 +156,22 @@ export default {
     },
     // 选中出发日期时触发
     handleDate(value) {
-        console.log('value；',value)
+      console.log("value；", value);
       this.ticketForm.departDate = moment(value).format("YYYY-MM-DD");
     },
     // 出发和目标城市切换时触发
-    handleReverse(){
-        const {departCity,departCode,destCity,destCode}=this.ticketForm;
+    handleReverse() {
+      const { departCity, departCode, destCity, destCode } = this.ticketForm;
 
-        this.ticketForm.departCity=destCity;
-        this.ticketForm.departCode=destCode;
+      this.ticketForm.departCity = destCity;
+      this.ticketForm.departCode = destCode;
 
-        this.ticketForm.destCity=departCity;
-        this.ticketForm.destCode=departCode;
+      this.ticketForm.destCity = departCity;
+      this.ticketForm.destCode = departCode;
     },
     // 提交搜索表单数据
     handleSearchSubmit() {
-        console.log(this.ticketForm,'提交搜索表单的数据ticketForm')
+      console.log(this.ticketForm, "提交搜索表单的数据ticketForm");
       // 验证方式
       const rules = {
         departCity: {
@@ -199,11 +187,11 @@ export default {
           message: "请选择出发日期"
         }
       };
-      rules.departCity.value = rules['departCity']['value']
+      rules.departCity.value = rules["departCity"]["value"];
       // 开关作用，判断验证是否通过
       let valid = true;
       // 循环判断上面的字段是否为空
-      Object.keys(rules).forEach((v,index) => {
+      Object.keys(rules).forEach((v, index) => {
         // 判断只要有一次是空，不会在执行循环
         if (!valid) return;
 
@@ -213,14 +201,13 @@ export default {
           this.$message.warning(rules[v].message);
         }
       });
-    //   跳转
-    if(valid){
+      //   跳转
+      if (valid) {
         this.$router.push({
-            path:'/airs/flights',
-            query:this.ticketForm
-        })
-    }
-    
+          path: "/airs/flights",
+          query: this.ticketForm
+        });
+      }
     }
   },
   mounted() {}
