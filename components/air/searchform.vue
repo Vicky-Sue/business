@@ -129,26 +129,22 @@ export default {
       });
     },
     //获取出发城市的数据
-    depQuerySearch(value, cb) {
-      this.queryStringSearch(value).then(res => {
-        console.log(res, "获取出发城市的promise封装的res");
+    async depQuerySearch(value, cb) {
+      const res = await this.queryStringSearch(value)
         if (res.length > 0) {
           this.ticketForm.departCity = res[0].value;
           this.ticketForm.departCode = res[0].sort;
         }
         cb(res);
-      });
     },
     //获取到达城市的数据
-    desQuerySearch(value, cb) {
-      this.queryStringSearch(value).then(res => {
+    async desQuerySearch(value, cb) {
+      const res= await this.queryStringSearch(value)
         if(res.length>0){
           this.ticketForm.destCity = res[0].value;
         this.ticketForm.destCode = res[0].sort;
         }
-        cb(res);
-      });
-      
+        cb(res);  
     },
     // 下拉选中出发城市时触发
     depHandleSelect(item) {
