@@ -1,42 +1,43 @@
 <template>
     <div class="flight-item">
-        <div>
+        <div @click='isShow=!isShow'>
             <!-- 显示的机票信息 -->
             <el-row type="flex" align="middle" class="flight-info">
                 <el-col :span="6">
-                    <span>{{airline_name}}</span> MU5316
+                    <span>{{ticketsdata.airline_name}}</span> {{ticketsdata.flight_no}}
                 </el-col>
                 <el-col :span="12">
                     <el-row type="flex" justify="space-between" class="flight-info-center">
                         <el-col :span="8" class="flight-airport">
-                            <strong>20:30</strong>
-                            <span>白云机场T1</span>
+                            <strong>{{ticketsdata.dep_time}}</strong>
+                            <span>{{ticketsdata.org_airport_name}}{{ticketsdata.org_airport_quay}}</span>
                         </el-col>
                         <el-col :span="8" class="flight-time">
                             <span>2时20分</span>
                         </el-col>
                         <el-col :span="8" class="flight-airport">
-                            <strong>22:50</strong>
-                            <span>虹桥机场T2</span>
+                            <strong>{{ticketsdata.arr_time}}</strong>
+                            <span>{{ticketsdata.dst_airport_name}}{{ticketsdata.dst_airport_quay}}</span>
                         </el-col>
                     </el-row>
                 </el-col>
                 <el-col :span="6" class="flight-info-right">
-                    ￥<span class="sell-price">810</span>起
+                    ￥<span class="sell-price">{{ticketsdata.base_price/2}}</span>起
                 </el-col>
             </el-row>
         </div>
-        <div class="flight-recommend">
+        <div class="flight-recommend" v-show='isShow'>
             <!-- 隐藏的座位信息列表 -->
-            <el-row type="flex"  justify="space-between" align="middle">
+            <el-row type="flex"  justify="space-between" align="middle"
+            v-for='(seatinfo,index) in ticketsdata.seat_infos' :key='index'>
                 <el-col :span="4">低价推荐</el-col>
                 <el-col :span="20">
                     <el-row type="flex" justify="space-between" align="middle" class="flight-sell">
                         <el-col :span="16" class="flight-sell-left">
-                            <span>经济舱</span> | 上海一诺千金航空服务有限公司
+                            <span>{{seatinfo.group_name}}</span> | {{seatinfo.supplierName}}
                         </el-col>
                         <el-col :span="5" class="price">
-                            ￥1345
+                            ￥{{seatinfo.par_price}}
                         </el-col>
                         <el-col :span="3" class="choose-button">
                             <el-button 
@@ -44,7 +45,7 @@
                             size="mini">
                             选定
                             </el-button>
-                            <p>剩余：83</p>
+                            <p>剩余：{{seatinfo.discount}}</p>
                         </el-col>
                     </el-row>
                 </el-col>
@@ -63,7 +64,16 @@ export default {
             // 默认是空数组
             default: {}
         }
+    },
+    data(){
+        return{
+            isShow:false,
+        }
+    },
+    methods:{
+        
     }
+
 }
 </script>
 
