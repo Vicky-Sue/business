@@ -6,14 +6,17 @@
         <div class="filters"></div>
 
         <!-- 航班头部部分 -->
-        <FlightsHead />
+        <FlightsHead/>
 
         <!-- 航班列表部分 -->
-        <!-- <FlightsLists/> -->
+        <FlightsLists/>
+
+        <!-- 分页部分 -->
+        <!-- <FlightsPagination/> -->
+      </div>
 
         <!-- 航班搜索记录侧栏部分 -->
-        <div class="aside"></div>
-      </div>
+        <div class="aside">侧栏部分</div>
     </el-row>
   </div>
 </template>
@@ -26,7 +29,13 @@ export default {
   components: {
     FlightsHead,
     FlightsLists
+  },
+  mounted(){
+    this.$axios({
+      url:'/airs/sale'
+    })
   }
+  
 };
 </script>
 
