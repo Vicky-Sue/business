@@ -9,7 +9,10 @@
         <FlightsHead/>
 
         <!-- 航班列表部分 -->
-        <FlightsLists/>
+        <FlightsLists v-for='(item,index) in flightsData.flights' 
+        :key='index'
+        :ticketsdata='item'
+        />
 
         <!-- 分页部分 -->
         <!-- <FlightsPagination/> -->
@@ -30,9 +33,24 @@ export default {
     FlightsHead,
     FlightsLists
   },
+  data(){
+    return{
+      // 机票总数据
+      flightsData:[],
+      // 机票总条数：
+      total:0,
+    }
+  },
   mounted(){
     this.$axios({
-      url:'/airs/sale'
+      url:'/airs',
+      params:this.$route.query
+    }).then((res)=>{
+      console.log(res,'机票列表的res')
+      // 总数据
+      this.flightsData= res.data;
+      // 总条数
+      this.totol=res.data.flights.length;
     })
   }
   

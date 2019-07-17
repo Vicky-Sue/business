@@ -4,7 +4,7 @@
             <!-- 显示的机票信息 -->
             <el-row type="flex" align="middle" class="flight-info">
                 <el-col :span="6">
-                    <span>东航 </span> MU5316
+                    <span>{{airline_name}}</span> MU5316
                 </el-col>
                 <el-col :span="12">
                     <el-row type="flex" justify="space-between" class="flight-info-center">
@@ -55,10 +55,10 @@
 
 <script>
 export default {
-
+    // 用对象的方式便于维护
     props: {
         // 数据
-        data: {
+        ticketsdata: {
             type: Object,
             // 默认是空数组
             default: {}
