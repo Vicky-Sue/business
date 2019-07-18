@@ -3,7 +3,7 @@
     <el-row type="flex" justify="space-between">
       <div class="flights-content">
         <!-- 过滤部分 -->
-        <div class="filters"></div>
+        <FlightsFilter/>
 
         <!-- 航班头部部分 -->
         <FlightsHead />
@@ -32,11 +32,14 @@
 <script>
 import FlightsHead from "@/components/air/flightsHead";
 import FlightsLists from "@/components/air/flightsList";
+import FlightsFilter from "@/components/air/flightsFilter";
+
 export default {
   // 注册组件
   components: {
     FlightsHead,
-    FlightsLists
+    FlightsLists,
+    FlightsFilter
   },
   data() {
     return {
