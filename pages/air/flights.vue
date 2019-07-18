@@ -24,7 +24,7 @@
       </div>
 
       <!-- 航班搜索记录侧栏部分 -->
-      <FlightsAside/>
+      <FlightsAside />
     </el-row>
   </div>
 </template>
@@ -77,10 +77,10 @@ export default {
     }
   },
   // // 当前url参数发生变化时候会触发
-  // beforeRouteUpdate (to, from, next) {
-  //   next();
-  //   this.getLists();
-  // },
+  beforeRouteUpdate (to, from, next) {
+    this.getLists();
+    next();
+  },
   mounted() {
     this.getLists();
   },

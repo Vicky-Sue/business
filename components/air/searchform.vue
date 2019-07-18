@@ -130,21 +130,21 @@ export default {
     },
     //获取出发城市的数据
     async depQuerySearch(value, cb) {
-      const res = await this.queryStringSearch(value)
-        if (res.length > 0) {
-          this.ticketForm.departCity = res[0].value;
-          this.ticketForm.departCode = res[0].sort;
-        }
-        cb(res);
+      const res = await this.queryStringSearch(value);
+      if (res.length > 0) {
+        this.ticketForm.departCity = res[0].value;
+        this.ticketForm.departCode = res[0].sort;
+      }
+      cb(res);
     },
     //获取到达城市的数据
     async desQuerySearch(value, cb) {
-      const res= await this.queryStringSearch(value)
-        if(res.length>0){
-          this.ticketForm.destCity = res[0].value;
+      const res = await this.queryStringSearch(value);
+      if (res.length > 0) {
+        this.ticketForm.destCity = res[0].value;
         this.ticketForm.destCode = res[0].sort;
-        }
-        cb(res);  
+      }
+      cb(res);
     },
     // 下拉选中出发城市时触发
     depHandleSelect(item) {
@@ -213,8 +213,16 @@ export default {
           query: this.ticketForm
         });
       }
+      // 把当前的搜索条件存储到本地的数组中
+      const airs = JSON.parse(localStorage.getItem('airs')) || [];
+      airs.unshift(this.ticketForm)
+      //截取只剩下5个
+      if(airs.length >5){
+        airs.length =5
+      }
+      localStorage.setItem('airs',JSON.stringify(airs))
+      console.log(localStorage.getItem('airs'),"localStorage.getItem('airs')")
     }
-
   },
   mounted() {}
 };
