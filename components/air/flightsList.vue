@@ -79,9 +79,9 @@ export default {
       const rank = end[0] * 60 + +end[1] - (start[0] * 60 + +start[1]);
       const hour = Math.floor(rank / 60);
       const min = rank % 60;
-      console.log(start, "start");
-      console.log(end, "end");
-      console.log(rank, "rank");
+      // console.log(start, "start");
+      // console.log(end, "end");
+      // console.log(rank, "rank");
       return `${hour}小时${min}分钟`;
     }
   },
