@@ -3,7 +3,7 @@
     <el-row type="flex" justify="space-between">
       <div class="flights-content">
         <!-- 过滤部分 -->
-        <FlightsFilter/>
+        <FlightsFilter :data='casheFlightsData' @changeFlights='changeFlights'/>
 
         <!-- 航班头部部分 -->
         <FlightsHead />
@@ -24,35 +24,45 @@
       </div>
 
       <!-- 航班搜索记录侧栏部分 -->
-      <div class="aside">侧栏部分</div>
+      <FlightsAside/>
     </el-row>
   </div>
 </template>
 
 <script>
 import FlightsHead from "@/components/air/flightsHead";
+import FlightsAside from "@/components/air/flightAside";
 import FlightsLists from "@/components/air/flightsList";
 import FlightsFilter from "@/components/air/flightsFilter";
-
+import _ from 'lodash'
 export default {
   // 注册组件
   components: {
     FlightsHead,
     FlightsLists,
-    FlightsFilter
+    FlightsFilter,
+    FlightsAside
   },
   data() {
     return {
       // 机票总数据
       flightsData: {
-        flights:[]
+        flights:[],
+        info:{},
+        options:{},
       },
+      // 不会被改变的数据
       // 机票总条数：
       total: 0,
       currentPage: 1,
       pageSize: 2,
-      //负责渲染页面的航班列表数据
-      // pageData: []
+      //用于缓存大数据，一旦赋值之后不能被修改
+      casheFlightsData:{
+        flights:[],
+        info:{},
+        options:{},
+      }
+      
     };
   },
   // 计算属性-监听任意数据的变化
@@ -69,12 +79,19 @@ export default {
   // // 当前url参数发生变化时候会触发
   // beforeRouteUpdate (to, from, next) {
   //   next();
-  //   this.getData();
+  //   this.getLists();
   // },
   mounted() {
     this.getLists();
   },
   methods: {
+    // 传递过滤参数
+    changeFlights(arr){
+      this.flightsData.flights=arr;
+      if(arr.length===0){
+       this.$message.warning('该时间段无航班，请选择其他时间段！')
+      }
+    },
     // 获取所有航班数据
     getLists() {
       this.$axios({
@@ -84,6 +101,8 @@ export default {
         console.log(res, "机票列表的res");
         // 总数据
         this.flightsData = res.data;
+        // 备份大数据，一旦赋值之后不能被修改
+        this.casheFlightsData=_.cloneDeep(res.data);
         // 总条数
         this.total = res.data.flights.length;
       
