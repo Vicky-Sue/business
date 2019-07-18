@@ -41,15 +41,33 @@ export default {
   data() {
     return {
       // 机票总数据
-      flightsData: [],
+      flightsData: {
+        flights:[]
+      },
       // 机票总条数：
       total: 0,
       currentPage: 1,
       pageSize: 2,
       //负责渲染页面的航班列表数据
-      pageData: []
+      // pageData: []
     };
   },
+  // 计算属性-监听任意数据的变化
+  // 监听和计算, 监听函数内部引用实例属性的变化，
+  // 只要有一个属性发生了变化，函数会重新计算并且返回新的值
+  computed: {
+    pageData() {
+      return this.flightsData.flights.slice(
+        (this.currentPage - 1) * this.pageSize,
+        this.currentPage * this.pageSize
+      );
+    }
+  },
+  // // 当前url参数发生变化时候会触发
+  // beforeRouteUpdate (to, from, next) {
+  //   next();
+  //   this.getData();
+  // },
   mounted() {
     this.getLists();
   },
@@ -65,29 +83,28 @@ export default {
         this.flightsData = res.data;
         // 总条数
         this.total = res.data.flights.length;
-        this.setPage();
+      
       });
     },
     // 封装根据页数，条数变化提供数据的方法
-    setPage() {
-      this.pageData = this.flightsData.flights.slice(
-        (this.currentPage - 1) * this.pageSize,
-        this.currentPage * this.pageSize
-      );
-    },
+    // setPage() {
+    //   this.pageData = this.flightsData.flights.slice(
+    //     (this.currentPage - 1) * this.pageSize,
+    //     this.currentPage * this.pageSize
+    //   );
+    // },
 
     // 每页展示条数的改变
     handleSizeChange(value) {
       console.log(value, "每页展示条数的改变");
       this.pageSize = value;
-      this.currentPage=1;
-      this.setPage();
+      // 重新回到第一页
+      this.currentPage = 1;
     },
     // 当前页的改变
     handleCurrentChange(value) {
       console.log(value, "当前页的改变");
       this.currentPage = value;
-      this.setPage();
     }
   }
 };
