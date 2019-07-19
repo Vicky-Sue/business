@@ -46,7 +46,7 @@
             </el-col>
             <el-col :span="5" class="price">￥{{seatinfo.par_price}}</el-col>
             <el-col :span="3" class="choose-button">
-              <el-button type="warning" size="mini" @click='handleSelectSeat(seatinfo.id,seatinfo.seat_xid)'>选定</el-button>
+              <el-button type="warning" size="mini" @click='handleSelectSeat(ticketsdata.id,seatinfo.seat_xid)'>选定</el-button>
               <p>剩余：{{seatinfo.discount}}</p>
             </el-col>
           </el-row>
@@ -80,7 +80,7 @@ export default {
       const hour = Math.floor(rank / 60);
       const min = rank % 60;
       // console.log(start, "start");
-      console.log(end, "end");
+      // console.log(end, "end");
       // console.log(rank, "rank");
       return `${hour}小时${min}分钟`;
     }
