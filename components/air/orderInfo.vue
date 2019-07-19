@@ -101,7 +101,16 @@ export default {
     },
 
     // 发送手机验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+        this.$store.dispatch('user/getCaptchas',this.orderParams.contactPhone).then(code=>{
+            this.$alert(`手机验证码是：${code}`,'提示',{
+                confirmButtonText:'确定',
+                type:'warning'
+            })
+        })
+        // console.log(this.orderParams.contactPhone,'----this.orderParams.contactPhone')
+
+    },
 
     // 提交订单
     handleSubmit() {}
