@@ -41,7 +41,7 @@ export default {
     FlightsHead,
     FlightsLists,
     FlightsFilter,
-    FlightsAside
+    FlightsAside,
   },
   data() {
     return {
