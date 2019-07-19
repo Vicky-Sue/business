@@ -77,9 +77,10 @@ export default {
     }
   },
   // // 当前url参数发生变化时候会触发
+  // 先执行next()再调用函数
   beforeRouteUpdate (to, from, next) {
+    next();    
     this.getLists();
-    next();
   },
   mounted() {
     this.getLists();
