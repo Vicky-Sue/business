@@ -86,7 +86,7 @@ export default {
     this.getLists();
   },
   methods: {
-    // 传递过滤参数
+    // 对获取到的过滤参数提供相应的数据
     changeFlights(arr){
       this.flightsData.flights=arr;
       if(arr.length===0){

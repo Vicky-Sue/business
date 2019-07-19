@@ -192,10 +192,11 @@ export default {
           message: "请选择出发日期"
         }
       };
-      rules.departCity.value = rules["departCity"]["value"];
+      
       // 开关作用，判断验证是否通过
       let valid = true;
       // 循环判断上面的字段是否为空
+      // console.log(Object.keys(rules),'Object.keys(rules)')
       Object.keys(rules).forEach((v, index) => {
         // 判断只要有一次是空，不会在执行循环
         if (!valid) return;
