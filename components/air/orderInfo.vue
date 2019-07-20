@@ -32,8 +32,8 @@
     <div class="air-column">
       <h2>保险</h2>
       <div>
-        <div class="insurance-item">
-          <el-checkbox v-for='(item,index) in orderParams.insurances' :key='index' 
+        <div v-for='(item,index) in orderParams.insurances' :key='index' class="insurance-item">
+          <el-checkbox  
           :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}万`" border></el-checkbox>
         </div>
       </div>
@@ -82,7 +82,8 @@ export default {
       },
       //   机票信息数据
       infoData: {
-          insurances:[]
+          insurances:[],
+          seat_infos:{}
       }
     };
   },
@@ -109,11 +110,12 @@ export default {
             })
         })
         // console.log(this.orderParams.contactPhone,'----this.orderParams.contactPhone')
-
     },
 
     // 提交订单
-    handleSubmit() {}
+    handleSubmit() {
+
+    }
   },
   mounted() {
     //   订单详情
@@ -126,7 +128,11 @@ export default {
     }).then(res=>{
         console.log(res,'选择机票，跳转到订单详情页携带的res')
         this.infoData=res.data;
+        this.$emit('orderData',this.infoData)
+        this.orderParams.insurances=res.data.insurances;
+        console.log(this.infoData,'this.infoData')
     })
+
   }
 };
 </script>

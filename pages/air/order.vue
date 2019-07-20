@@ -2,21 +2,34 @@
     <div class="container">
         <el-row type="flex" justify="space-between">
             <!-- 订单表单 -->
-            <OrderInfo class="main"/>>
+            <OrderInfo @orderData='orderData' class="main"/>
 
             <!-- 侧边栏 -->
-            <div class="aside">
+            <OrderAside :data='orderInfos' class="aside"/>
                           
-            </div>
         </el-row>
     </div>
 </template>
 
 <script>
 import OrderInfo from '@/components/air/orderInfo'
+import OrderAside from '@/components/air/orderAside'
 export default {
     components:{
         OrderInfo,
+        OrderAside
+    },
+    data(){
+        return{
+            orderInfos:{
+                seat_infos:{}
+            }
+        }
+    },
+    methods:{
+        orderData(data){
+            this.orderInfos=data;
+        }
     }
 }
 </script>
