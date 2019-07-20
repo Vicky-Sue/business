@@ -31,13 +31,13 @@ export default {
   data() {
     return {
       info: {},
-      timer: ""
+      timer: null
     };
   },
   mounted() {
     const canvas = document.getElementById("qrcode-stage");
     const { id } = this.$route.query;
-    // 等待本地存储赋值完成后再执行
+    // 等待本地存储赋值完成后再执行 -订单详情接口请求
     setTimeout(() => {
       this.$axios({
         url: "/airorders/" + id,
@@ -52,15 +52,15 @@ export default {
         QRCode.toCanvas(canvas, this.info.payInfo.code_url, { width: 200 });
 
         // 支付结果轮询
-        this.timer=setInterval(async v=>{
-            const paid =await this.isPay(this.info);
-            // 如果是true则付款成功
-            if(paid){
-                this.$message.success('订单支付成功');
-                clearInterval(this.timer)
-            }
-        },3000)
-      });   
+        this.timer = setInterval(async v => {
+          const paid = await this.isPay(this.info);
+          // 如果是true则付款成功
+          if (paid) {
+            this.$message.success("订单支付成功");
+            clearInterval(this.timer);
+          }
+        }, 3000);
+      });
     }, 1);
   },
   methods: {
@@ -89,6 +89,25 @@ export default {
         }
       });
     }
+  },
+  // 离开前弹窗确认是否离开当前页面-组件销毁前触发的生命周期钩子
+//   beforeDestroy() {
+//     this.$confirm("此操作将离开当前付款页面, 是否继续?", "提示", {
+//       confirmButtonText: "确定",
+//       cancelButtonText: "取消",
+//       type: "warning"
+//     })
+//       .then(() => {
+//         this.$message({
+//           type: "success",
+//           message: "正在为您跳转"
+//         });
+//       })
+//   },
+  // 确认离开-组件销毁时候触发的生命周期钩子
+  destroyed() {
+      console.log('aa')
+    clearInterval(this.timer);
   }
 };
 </script>
