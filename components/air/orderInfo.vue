@@ -206,7 +206,9 @@ export default {
         }
       }).then(res => {
         console.log(res, "提交订单的res");
-        this.$message.success(res.data.message);
+        const {message,data}=res.data
+        this.$message.success(message);
+        this.$router.push('/air/pay?id='+data.id);
       });
     }
   },
