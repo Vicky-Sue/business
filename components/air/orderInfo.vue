@@ -3,11 +3,13 @@
     <div class="air-column">
       <h2>乘机人</h2>
       <el-form class="member-info">
-        <div class="member-info-item"
-        v-for='(item,index) in orderParams.users' :key='index'
-        >
+        <div class="member-info-item" v-for="(item,index) in orderParams.users" :key="index">
           <el-form-item label="乘机人类型">
-            <el-input v-model='orderParams.users.username'  placeholder="姓名" class="input-with-select">
+            <el-input
+              v-model="orderParams.users.username"
+              placeholder="姓名"
+              class="input-with-select"
+            >
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option label="成人" value="1"></el-option>
               </el-select>
@@ -15,7 +17,7 @@
           </el-form-item>
 
           <el-form-item label="证件类型">
-            <el-input v-model='orderParams.users.id' placeholder="证件号码" class="input-with-select">
+            <el-input v-model="orderParams.users.id" placeholder="证件号码" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option label="身份证" value="1" :checked="true"></el-option>
               </el-select>
@@ -32,9 +34,12 @@
     <div class="air-column">
       <h2>保险</h2>
       <div>
-        <div v-for='(item,index) in orderParams.insurances' :key='index' class="insurance-item">
-          <el-checkbox  
-          :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}万`" border></el-checkbox>
+        <div v-for="(item,index) in infoData.insurances" :key="index" class="insurance-item">
+          <el-checkbox
+            @change="handleInsurance(item)"
+            :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}万`"
+            border
+          ></el-checkbox>
         </div>
       </div>
     </div>
@@ -44,11 +49,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input v-model='orderParams.contactName'></el-input>
+            <el-input v-model="orderParams.contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容" v-model='orderParams.contactPhone'>
+            <el-input placeholder="请输入内容" v-model="orderParams.contactPhone">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -62,6 +67,8 @@
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
+    <!-- 把总价格从store里面拿出来，存在隐藏域里面,computed属性要调用才会发生相应的变化-->
+    <input type='hidden' :value='sumPrice'/>
   </div>
 </template>
 
@@ -72,67 +79,94 @@ export default {
     return {
       // 提交机票需要提供的数据
       orderParams: {
-        users: [{ username: "", id: '' }],//用户集合
-        insurances: [],//保险集合
-        contactName: "",//联系人名字
-        contactPhone: "",//联系人电话
-        invoice:false,//是否需要发票，默认为false
-        seat_xid: "",//作为id（来自于参数
-        air: ""//航班id（来自于参数）
+        users: [{ username: "", id: "" }], //用户集合
+        insurances: [], //保险集合
+        contactName: "", //联系人名字
+        contactPhone: "", //联系人电话
+        invoice: false, //是否需要发票，默认为false
+        seat_xid: "", //作为id（来自于参数
+        air: "" //航班id（来自于参数）
       },
       //   机票信息数据
       infoData: {
-          insurances:[],
-          seat_infos:{}
+        insurances: [],
+        seat_infos: {}
       }
     };
   },
-
+  computed: {
+    sumPrice() {
+      let price = 0;
+      // 基建燃油费
+      price += this.infoData.seat_infos.org_settle_price;
+      // 机票单价
+      price += this.infoData.airport_tax_audlet;
+      // 保险
+      price += this.orderParams.insurances.length*30
+      // 人数
+      price *= this.orderParams.users.length
+      this.$store.commit('air/setAllPrice',price)
+    }
+  },
   methods: {
     // 添加乘机人
     handleAddUsers() {
-        this.orderParams.users.push({
-            username:'',id:''
-        })
+      this.orderParams.users.push({
+        username: "",
+        id: ""
+      });
     },
 
     // 移除乘机人
     handleDeleteUser(index) {
-        this.orderParams.users.splice(index,1)
+      this.orderParams.users.splice(index, 1);
     },
-
+    // 选择保险
+    handleInsurance(insurance) {
+      // 判断该数组中是否已经存在该id
+      const index = this.orderParams.insurances.indexOf(insurance.id);
+      console.log(insurance.id, "insurance.id");
+      console.log(index, "index");
+      if (index > -1) {
+        //如果存在就删除
+        this.orderParams.insurances.splice(index, 1);
+      } else {
+        this.orderParams.insurances.push(insurance.id);
+      }
+      console.log(this.orderParams.insurances, "-------this.insurances");
+    },
     // 发送手机验证码
     handleSendCaptcha() {
-        this.$store.dispatch('user/getCaptchas',this.orderParams.contactPhone).then(code=>{
-            this.$alert(`手机验证码是：${code}`,'提示',{
-                confirmButtonText:'确定',
-                type:'warning'
-            })
-        })
-        // console.log(this.orderParams.contactPhone,'----this.orderParams.contactPhone')
+      this.$store
+        .dispatch("user/getCaptchas", this.orderParams.contactPhone)
+        .then(code => {
+          this.$alert(`手机验证码是：${code}`, "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+        });
+      // console.log(this.orderParams.contactPhone,'----this.orderParams.contactPhone')
     },
 
     // 提交订单
-    handleSubmit() {
-
-    }
+    handleSubmit() {}
   },
   mounted() {
     //   订单详情
-    const {id, seat_xid}=this.$route.query;
+    const { id, seat_xid } = this.$route.query;
     this.$axios({
-        url:'airs/'+id,
-        params:{
-            seat_xid
-        }
-    }).then(res=>{
-        console.log(res,'选择机票，跳转到订单详情页携带的res')
-        this.infoData=res.data;
-        this.$emit('orderData',this.infoData)
-        this.orderParams.insurances=res.data.insurances;
-        console.log(this.infoData,'this.infoData')
-    })
-
+      url: "airs/" + id,
+      params: {
+        seat_xid
+      }
+    }).then(res => {
+      console.log(res, "选择机票，跳转到订单详情页携带的res");
+      this.infoData = res.data;
+      this.$emit("orderData", this.infoData);
+      console.log(this.infoData, "this.infoData");
+    });
+    this.orderParams.seat_xid = this.$route.query.seat_xid;
+    this.orderParams.air = this.$route.query.id;
   }
 };
 </script>
