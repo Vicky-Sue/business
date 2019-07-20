@@ -13,7 +13,7 @@ export default ({ $axios }) => {
 
         if (statusCode === 400) {
             // 错误提示
-            Message.error('用户名或者密码错误，请重试');
+            Message.error(message);
         }
     })
 
