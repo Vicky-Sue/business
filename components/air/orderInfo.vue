@@ -17,7 +17,11 @@
           </el-form-item>
 
           <el-form-item label="证件类型">
-            <el-input v-model="orderParams.users[index].id" placeholder="证件号码" class="input-with-select">
+            <el-input
+              v-model="orderParams.users[index].id"
+              placeholder="证件号码"
+              class="input-with-select"
+            >
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option label="身份证" value="1" :checked="true"></el-option>
               </el-select>
@@ -61,7 +65,7 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input v-model='orderParams.captcha'></el-input>
+            <el-input v-model="orderParams.captcha"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -83,7 +87,7 @@ export default {
         insurances: [], //保险集合
         contactName: "", //联系人名字
         contactPhone: "", //联系人电话
-        captcha: "",            // 验证码 （注意下接口文档没有说明）
+        captcha: "", // 验证码 （注意下接口文档没有说明）
         invoice: false, //是否需要发票，默认为false
         seat_xid: "", //作为id（来自于参数
         air: "" //航班id（来自于参数）
@@ -103,10 +107,10 @@ export default {
       // 机票单价
       price += this.infoData.airport_tax_audlet;
       // 保险
-      price += this.orderParams.insurances.length*30
+      price += this.orderParams.insurances.length * 30;
       // 人数
-      price *= this.orderParams.users.length
-      this.$store.commit('air/setAllPrice',price)
+      price *= this.orderParams.users.length;
+      this.$store.commit("air/setAllPrice", price);
     }
   },
   methods: {
@@ -141,7 +145,7 @@ export default {
       this.$store
         .dispatch("user/getCaptchas", this.orderParams.contactPhone)
         .then(code => {
-          this.captcha=code;
+          this.captcha = code;
           this.$alert(`手机验证码是：${code}`, "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -153,47 +157,57 @@ export default {
     // 提交订单
     handleSubmit() {
       // 判断状态的对象
-      console.log(this.orderParams,'-------------this.orderParams')
-      console.log(this.orderParams.users[0].username,'this.orderParams.users[0].username')
-      const rulesb={
-        users:{
-          value:this.orderParams.users[0].username && this.orderParams.users[0].id,
-          message:'乘机人不能为空'
+      console.log(this.orderParams, "-------------this.orderParams");
+      console.log(
+        this.orderParams.users[0].username,
+        "this.orderParams.users[0].username"
+      );
+      const rulesb = {
+        users: {
+          value:
+            this.orderParams.users[0].username && this.orderParams.users[0].id,
+          message: "乘机人不能为空"
         },
-        contactName:{
-          value:this.orderParams.contactName,
-          message:'请输入联系人'
+        contactName: {
+          value: this.orderParams.contactName,
+          message: "请输入联系人"
         },
-        contactPhone:{
-          value:this.orderParams.contactPhone,
-          message:'请输入手机号'
+        contactPhone: {
+          value: this.orderParams.contactPhone,
+          message: "请输入手机号"
         },
-        captcha:{
-          value:this.orderParams.captcha,
-          message:'请输入验证码'
-        },
+        captcha: {
+          value: this.orderParams.captcha,
+          message: "请输入验证码"
+        }
       };
-      // 开关作用-发现非填的选项立即组织
+      // 开关作用-发现非填的选项立即阻止
       let valid = true;
-      Object.keys(rulesb).forEach( e => {
-        if(!rulesb[e].value){
+
+      Object.keys(rulesb).forEach(e => {
+        // 阻止遍历
+        if (!valid) return;
+        
+        if (!rulesb[e].value) {
           valid = false;
-          this.$message.warning(rulesb[e].message)
+          this.$message.warning(rulesb[e].message);
         }
-        // if(!valid) return;
       });
+      // 阻止往下执行
+      if (!valid) return;
+
       this.$axios({
-        url:'/airorders',
-        method:'POST',
-        data:this.orderParams,
-        headers:{
+        url: "/airorders",
+        method: "POST",
+        data: this.orderParams,
+        headers: {
           // token规范来自于JWT
-          Authorization:`Bearer ${this.$store.state.user.userInfo.token}`
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-      }).then(res=>{
-        console.log(res,'提交订单的res')
-        this.$message.success('提交订单成功')
-      })
+      }).then(res => {
+        console.log(res, "提交订单的res");
+        this.$message.success(res.data.message);
+      });
     }
   },
   mounted() {

@@ -7,8 +7,7 @@ export default ({ $axios }) => {
 
     // 拦截axios的错误请求
     $axios.onError(err => {
-        console.log(err,'拦截器的res')
-        console.log(err.response,'拦截器的response')
+        console.log(err.response.data,'拦截器的err.response.data')
         const { message, statusCode } = err.response.data;
 
         if (statusCode === 400) {
